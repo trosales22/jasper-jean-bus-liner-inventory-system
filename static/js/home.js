@@ -38,17 +38,33 @@ $(function() {
 							type: 'POST',
 							data: $("#frmAddProduct").serialize(),
 							success: function(data) {
-								$.alert({
-									title: 'Yehey!',
-									content: 'Product was successfully added!',
-									useBootstrap: false,
-									theme: 'supervan',
-									buttons: {
-										'Ok, Got It!': function () {
-											location.replace(base_url());
+								var obj = JSON.parse(data);
+								
+								if(obj.flag === 0){
+									$.alert({
+										title: "Oops! We're sorry!",
+										content: obj.msg,
+										useBootstrap: false,
+										theme: 'supervan',
+										buttons: {
+											'Ok, Got It!': function () {
+												//do nothing
+											}
 										}
-									}
-								});
+									});
+								}else{
+									$.alert({
+										title: 'Success!',
+										content: obj.msg,
+										useBootstrap: false,
+										theme: 'supervan',
+										buttons: {
+											'Ok, Got It!': function () {
+												location.replace(base_url());
+											}
+										}
+									});
+								}
 							},
 							error: function(xhr, status, error){
 								var errorMessage = xhr.status + ': ' + xhr.statusText;
