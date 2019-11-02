@@ -4,9 +4,8 @@ A web-based maintenance and inventory system for Jasper Jean Bus Liner with deci
 ## Tools
 
 -PHP CodeIgniter<br>
--RESTful API<br>
 -MySQL<br>
--HTML/CSS/Bootstrap<br>
+-HTML5 / CSS3 / Bootstrap<br>
 -JavaScript<br>
 
 ## Server Requirements
