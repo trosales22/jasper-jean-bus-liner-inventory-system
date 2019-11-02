@@ -13,8 +13,6 @@ class Home extends CI_Controller {
 	
   	public function index() {
 		$this->data['products'] = $this->home_model->get_products();
-		//print "<pre>";
-		//die(print_r($this->data));
     	$this->load->view('home_page', $this->data);
 	}
 
