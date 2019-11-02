@@ -44,4 +44,36 @@ class Home_model extends CI_Model {
 			$this->db->trans_rollback();
 		}
 	}
+
+	public function get_orders($order_id = NULL){
+		$where_condition = '';
+		if(!empty($order_id)){
+			$where_condition .= "WHERE A.order_id = '" . $order_id . "'";
+		}
+
+		$query = "
+			SELECT 
+				A.order_id, A.order_name, A.order_product, 
+				A.order_bus, B.product_name, A.order_quantity, 
+				REPLACE(B.product_amount, ',', '') * REPLACE(A.order_quantity, ',', '') as order_total_amount,  
+				DATE_FORMAT(A.order_date_added, '%M %d, %Y %r') as order_date_added 
+			FROM 
+				orders A
+			LEFT JOIN 
+				products B ON A.order_product = B.product_id $where_condition
+			";
+
+		$stmt = $this->db->query($query);
+		return $stmt->result();
+	}
+
+	public function add_order(array $order_params){
+		try{
+			$this->db->insert('orders', $order_params);
+			$lastInsertedId = $this->db->insert_id();
+		}catch(PDOException $e){
+			$msg = $e->getMessage();
+			$this->db->trans_rollback();
+		}
+	}
 }

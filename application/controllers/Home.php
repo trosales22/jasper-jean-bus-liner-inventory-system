@@ -13,9 +13,10 @@ class Home extends CI_Controller {
 	
   	public function index() {
 		$this->data['products'] = $this->home_model->get_products();
+		$this->data['orders'] = $this->home_model->get_orders();
     	$this->load->view('home_page', $this->data);
 	}
-
+	
 	public function add_product(){
 		try{
 			$success       			= 0;
@@ -64,6 +65,55 @@ class Home extends CI_Controller {
 		if($success == 1){
 			$response = [
 				'msg'       => 'Product was successfully added!',
+				'flag'      => $success
+			];
+		}else{
+			$response = [
+				'msg'       => $msg,
+				'flag'      => $success
+			];
+		}
+
+		echo json_encode($response);
+	}
+
+	public function add_order(){
+		try{
+			$success       		= 0;
+			$order_name 		= trim($this->input->post('order_name'));
+			$order_product 		= trim($this->input->post('order_product'));
+			$order_quantity 	= trim($this->input->post('order_quantity'));
+			$order_bus 			= trim($this->input->post('order_bus'));
+			
+			if(EMPTY($order_name))
+				throw new Exception("Order Name is required.");
+
+			if(EMPTY($order_product))
+				throw new Exception("Order Product is required.");
+
+			if(EMPTY($order_quantity))
+				throw new Exception("Order Quantity is required.");
+
+			if(EMPTY($order_bus))
+				throw new Exception("Order Bus is required.");
+
+			$order_params = array(
+				'order_name'		=> $order_name,
+				'order_product'		=> $order_product,
+				'order_quantity'	=> $order_quantity,
+				'order_bus'			=> $order_bus
+			);
+
+			$this->home_model->add_order($order_params);
+			
+			$success  = 1;
+		}catch (Exception $e){
+			$msg = $e->getMessage();      
+		}
+
+		if($success == 1){
+			$response = [
+				'msg'       => 'Product was ordered successfully!',
 				'flag'      => $success
 			];
 		}else{
