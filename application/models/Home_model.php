@@ -2,13 +2,13 @@
 class Home_model extends CI_Model {
 	public function get_products($product_name = NULL){
 		$where_condition = '';
-		if(!empty($user_id)){
-			$where_condition .= 'WHERE A.product_name = ' . $product_name;
+		if(!empty($product_name)){
+			$where_condition .= "WHERE A.product_name = '" . $product_name . "'";
 		}
 
 		$query = "
 			SELECT 
-				A.product_name, A.product_description, 
+				A.product_id, A.product_name, A.product_description, 
 				A.product_amount, B.quantity as product_quantity, 
 				A.product_seller, DATE_FORMAT(A.product_date_added, '%M %d, %Y %r') as product_date_added 
 			FROM 
@@ -23,8 +23,6 @@ class Home_model extends CI_Model {
 
 	public function add_product(array $product_params){
 		try{
-			$this->db->trans_begin();
-
 			$products_fields = array(
 				'product_name'			=> $product_params['product_name'],
 				'product_description'	=> $product_params['product_description'],
@@ -41,7 +39,7 @@ class Home_model extends CI_Model {
 			);
 			
 			$this->db->insert('product_qty', $product_qty_fields);
-		}catch(Exception $e){
+		}catch(PDOException $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
 		}

@@ -62,12 +62,37 @@
 											<th>Quantity</th>
 											<th>Amount</th>
 											<th>Seller</th>
+											<th>Date Added</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   
                   <tbody>
-										
+									<?php foreach($products as $product){?>
+											<tr>
+												<td><?php echo $product->product_name;?></td>
+												<td><?php echo $product->product_description;?></td>
+												<td><?php echo $product->product_quantity;?></td>
+												<td><?php echo $product->product_amount;?></td>
+												<td><?php echo $product->product_seller;?></td>
+												<td><?php echo $product->product_date_added;?></td>
+												<td>
+													<a style="width: 100%; margin-bottom: 8px; cursor: pointer; color: white;" data-toggle="modal" data-id="<?php echo $product->product_id;?>" data-target="#editProductModal" class="btnEditProduct btn btn-success btn-icon-split">
+														<span class="icon text-white-50" style="margin-right: auto;">
+															<i class="fas fa-edit"></i>
+														</span>
+														<span class="text" style="margin-right: auto;">Edit</span>
+													</a>
+
+													<a style="width: 100%; cursor: pointer; color: white;" data-toggle="modal" data-id="<?php echo $product->product_id;?>" data-target="#deleteProductModal" class="btnDeleteProduct btn btn-danger btn-icon-split">
+														<span class="icon text-white-50" style="margin-right: auto;">
+															<i class="fas fa-window-close"></i>
+														</span>
+														<span class="text" style="margin-right: auto;">Delete</span>
+													</a>
+												</td>
+											</tr> 
+                     <?php }?>
                   </tbody>
 
                   <tfoot>
@@ -77,6 +102,7 @@
 											<th>Quantity</th>
 											<th>Amount</th>
 											<th>Seller</th>
+											<th>Date Added</th>
                       <th>Actions</th>
                     </tr>
                   </tfoot>
