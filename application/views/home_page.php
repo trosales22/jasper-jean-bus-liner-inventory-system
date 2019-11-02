@@ -61,6 +61,7 @@
                       <th>Description</th>
 											<th>Quantity</th>
 											<th>Amount</th>
+											<th>Seller</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -75,6 +76,7 @@
                       <th>Description</th>
 											<th>Quantity</th>
 											<th>Amount</th>
+											<th>Seller</th>
                       <th>Actions</th>
                     </tr>
                   </tfoot>
