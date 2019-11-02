@@ -41,7 +41,7 @@ class Home extends CI_Controller {
 			if(EMPTY($product_seller))
 				throw new Exception("Product Seller is required.");
 
-			$does_product_exist = $this->home_model->get_products($product_name);
+			$does_product_exist = $this->home_model->get_products(NULL, $product_name);
 
 			if(!empty($does_product_exist)){
 				throw new Exception("Product exists. Please try again!");
@@ -114,6 +114,36 @@ class Home extends CI_Controller {
 		if($success == 1){
 			$response = [
 				'msg'       => 'Product was ordered successfully!',
+				'flag'      => $success
+			];
+		}else{
+			$response = [
+				'msg'       => $msg,
+				'flag'      => $success
+			];
+		}
+
+		echo json_encode($response);
+	}
+
+	public function approve_pending_order(){
+		try{
+			$success       		= 0;
+			$order_id 		= trim($this->input->get('order_id'));
+			
+			if(EMPTY($order_id))
+				throw new Exception("Order ID is required.");
+
+			$this->home_model->approve_pending_order($order_id);
+			
+			$success  = 1;
+		}catch (Exception $e){
+			$msg = $e->getMessage();      
+		}
+
+		if($success == 1){
+			$response = [
+				'msg'       => 'Order was successfully approved. Ordered quantity will now be deducted to product quantity. Thank you.',
 				'flag'      => $success
 			];
 		}else{

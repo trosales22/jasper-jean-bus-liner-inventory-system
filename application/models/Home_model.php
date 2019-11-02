@@ -1,7 +1,12 @@
 <?php
 class Home_model extends CI_Model {
-	public function get_products($product_name = NULL){
+	public function get_products($product_id = NULL, $product_name = NULL){
 		$where_condition = '';
+
+		if(!empty($product_id)){
+			$where_condition .= "WHERE A.product_id = '" . $product_id . "'";
+		}
+
 		if(!empty($product_name)){
 			$where_condition .= "WHERE A.product_name = '" . $product_name . "'";
 		}
@@ -72,6 +77,30 @@ class Home_model extends CI_Model {
 			$this->db->insert('orders', $order_params);
 			$lastInsertedId = $this->db->insert_id();
 		}catch(PDOException $e){
+			$msg = $e->getMessage();
+			$this->db->trans_rollback();
+		}
+	}
+
+	public function approve_pending_order($order_id){
+		try{
+			//update pending order
+			$order_params = array('order_status' => 'APPROVED');
+			$this->db->where('order_id', $order_id);
+			$this->db->update('orders', $order_params);
+
+			//update qty of product
+			$order_details = $this->get_orders($order_id);
+			$product_details = $this->get_products($order_details[0]->order_product, NULL);
+			
+			// print "<pre>";
+			// print_r($order_details);
+			// die(print_r($product_details));
+			
+			$order_params = array('quantity' => $product_details[0]->product_quantity - $order_details[0]->order_quantity);
+			$this->db->where('product_id', $product_details[0]->product_id);
+			$this->db->update('product_qty', $order_params);
+		}catch(Exception $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
 		}

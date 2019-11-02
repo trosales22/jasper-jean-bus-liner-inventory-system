@@ -163,6 +163,80 @@ $(function() {
 		});
 	}
 	
+	function approveOrder(){
+		$('.btnApproveOrder').click(function(){
+			var orderId = $(this).data("id");
+
+			console.log('orderId: ' + orderId);
+			
+			$.confirm({
+				title: 'Confirmation!',
+				content: 'Are you sure you want to approve this pending order?',
+				useBootstrap: false, 
+				theme: 'supervan',
+				buttons: {
+					NO: function () {
+						//do nothing
+					},
+					YES: function () {
+						$.ajax({
+							url: base_url() + 'home/approve_pending_order?order_id=' + orderId,
+							type: "POST",
+							processData: false,
+							contentType: false,
+							cache: false,
+							async: false,
+							success: function(data) {
+								var obj = JSON.parse(data);
+		
+								if(obj.flag === 0){
+									$.alert({
+										title: "Oops! We're sorry!",
+										content: obj.msg,
+										useBootstrap: false,
+										theme: 'supervan',
+										buttons: {
+											'Ok, Got It!': function () {
+												//do nothing
+											}
+										}
+									});
+								}else{
+									$.alert({
+										title: 'Success!',
+										content: obj.msg,
+										useBootstrap: false,
+										theme: 'supervan',
+										buttons: {
+											'Ok, Got It!': function () {
+												location.replace(base_url());
+											}
+										}
+									});
+								}
+							},
+							error: function(xhr, status, error){
+								var errorMessage = xhr.status + ': ' + xhr.statusText;
+								$.alert({
+									title: "Oops! We're sorry!",
+									content: errorMessage,
+									useBootstrap: false,
+									theme: 'supervan',
+									buttons: {
+										'Ok, Got It!': function () {
+											//do nothing
+										}
+									}
+								});
+							 }
+						});
+						
+					}
+				}
+			});
+		});
+	}
+
 	$('#frmAddProduct').parsley().on('field:validated', function() {
 		var ok = $('.parsley-error').length === 0;
 	});
@@ -173,4 +247,5 @@ $(function() {
 
 	addProduct();
 	addOrder();
+	approveOrder();
 });

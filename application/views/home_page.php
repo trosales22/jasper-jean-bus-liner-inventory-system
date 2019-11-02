@@ -152,7 +152,7 @@
 												<td><?php echo $order->order_bus;?></td>
 												<td><?php echo $order->order_date_added;?></td>
 												<td>
-													<a style="width: 100%; cursor: pointer; color: white;" data-toggle="modal" data-id="<?php echo $order->order_id;?>" data-target="#approveOrderModal" class="btnApproveOrder btn btn-info btn-icon-split">
+													<a style="width: 100%; cursor: pointer; color: white;" data-id="<?php echo $order->order_id;?>" class="btnApproveOrder btn btn-info btn-icon-split">
 														<span class="icon text-white-50" style="margin-right: auto;">
 															<i class="fas fa-check"></i>
 														</span>
