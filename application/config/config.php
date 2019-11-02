@@ -38,7 +38,7 @@ if (!EMPTY($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] != 'off'){
 $base_url_str 		= '';
 
 if( ISSET( $_SERVER['HTTP_HOST'] ) ){
-	$base_url_str 	= $http_request.'://'.$_SERVER['HTTP_HOST'].'/jjbl-inventory-system';
+	$base_url_str 	= $http_request.'://'.$_SERVER['HTTP_HOST'].'/jjbl-inventory-system/';
 }
 
 $config['base_url'] = $base_url_str;
@@ -53,7 +53,7 @@ $config['base_url'] = $base_url_str;
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

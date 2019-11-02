@@ -101,9 +101,11 @@
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
-  </a>
+	</a>
 
-  <?php include 'pages/modals/logout.php';?>
+	<?php include 'pages/modals/logout.php';?>
+	
+	<?php include 'pages/modals/add_product.php';?>
 	
   <!-- Bootstrap core JavaScript-->
   <script src="<?php echo base_url(); ?>static/SBAdmin/vendor/jquery/jquery.min.js"></script>
@@ -125,7 +127,7 @@
   <!-- Page level custom scripts -->
 	<script src="<?php echo base_url(); ?>static/SBAdmin/js/demo/datatables-demo.js"></script>
 	<script src="https://parsleyjs.org/dist/parsley.min.js"></script>
-	<script src="<?php echo base_url(); ?>static/js/libraries/jquery-confirm-v3.3.4/dist/jquery-confirm.min.js"></script>
+	<script src="<?php echo base_url(); ?>static/js/libraries/jquery-confirm-v3.3.4/js/jquery-confirm.js"></script>
 	<script src="<?php echo base_url(); ?>static/js/home.js"></script>
 
 </body>
