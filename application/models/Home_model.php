@@ -59,7 +59,7 @@ class Home_model extends CI_Model {
 		$query = "
 			SELECT 
 				A.order_id, A.order_name, A.order_product, 
-				A.order_bus, B.product_name, A.order_quantity, 
+				A.order_bus, B.product_name, A.order_quantity, A.order_status,
 				REPLACE(B.product_amount, ',', '') * REPLACE(A.order_quantity, ',', '') as order_total_amount,  
 				DATE_FORMAT(A.order_date_added, '%M %d, %Y %r') as order_date_added 
 			FROM 
