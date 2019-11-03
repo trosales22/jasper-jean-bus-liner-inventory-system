@@ -84,7 +84,7 @@
 														<span class="text" style="margin-right: auto;">Edit Product</span>
 													</a>
 
-													<a style="width: 100%; cursor: pointer; color: white;" data-toggle="modal" data-id="<?php echo $product->product_id;?>" data-target="#deleteProductModal" class="btnDeleteProduct btn btn-danger btn-icon-split">
+													<a style="width: 100%; cursor: pointer; color: white;" data-id="<?php echo $product->product_id;?>" class="btnDeleteProduct btn btn-danger btn-icon-split">
 														<span class="icon text-white-50" style="margin-right: auto;">
 															<i class="fas fa-trash"></i>
 														</span>
@@ -202,6 +202,8 @@
 	</a>
 
 	<?php include 'pages/modals/add_product.php';?>
+
+	<?php include 'pages/modals/edit_product.php';?>
 	
 	<?php include 'pages/modals/add_order.php';?>
 	

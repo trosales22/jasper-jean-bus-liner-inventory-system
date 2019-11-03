@@ -17,6 +17,35 @@ class Home extends CI_Controller {
     	$this->load->view('home_page', $this->data);
 	}
 	
+	public function get_product_details(){
+		try{
+			$success       			= 0;
+			$product_id 			= trim($this->input->get('product_id'));
+
+			if(EMPTY($product_id))
+				throw new Exception("Product ID is required.");
+
+			$product_details = $this->home_model->get_products($product_id, NULL);
+			$success  = 1;
+		}catch (Exception $e){
+			$msg = $e->getMessage();      
+		}
+
+		if($success == 1){
+			$response = [
+				'product_details' 	=> $product_details,
+				'flag'      		=> $success
+			];
+		}else{
+			$response = [
+				'msg'       => $msg,
+				'flag'      => $success
+			];
+		}
+
+		echo json_encode($response);
+	}
+
 	public function add_product(){
 		try{
 			$success       			= 0;
@@ -65,6 +94,95 @@ class Home extends CI_Controller {
 		if($success == 1){
 			$response = [
 				'msg'       => 'Product was successfully added!',
+				'flag'      => $success
+			];
+		}else{
+			$response = [
+				'msg'       => $msg,
+				'flag'      => $success
+			];
+		}
+
+		echo json_encode($response);
+	}
+
+	public function edit_product(){
+		try{
+			$success       			= 0;
+			$product_id				= trim($this->input->get('product_id'));
+			$product_name 			= trim($this->input->post('product_name'));
+			$product_description 	= trim($this->input->post('product_description'));
+			$product_amount 		= trim($this->input->post('product_amount'));
+			$product_quantity 		= trim($this->input->post('product_quantity'));
+			$product_seller 		= trim($this->input->post('product_seller'));
+			
+			if(EMPTY($product_id))
+				throw new Exception("Product ID is required.");
+
+			if(EMPTY($product_name))
+				throw new Exception("Product Name is required.");
+
+			if(EMPTY($product_description))
+				throw new Exception("Product Description is required.");
+
+			if(EMPTY($product_amount))
+				throw new Exception("Product Amount is required.");
+
+			if(EMPTY($product_quantity))
+				throw new Exception("Product Quantity is required.");
+
+			if(EMPTY($product_seller))
+				throw new Exception("Product Seller is required.");
+
+			$product_params = array(
+				'product_id'			=> $product_id,
+				'product_name'			=> $product_name,
+				'product_description'	=> $product_description,
+				'product_amount'		=> $product_amount,
+				'product_quantity'		=> $product_quantity,
+				'product_seller'		=> $product_seller
+			);
+
+			$this->home_model->edit_product($product_params);
+			
+			$success  = 1;
+		}catch (Exception $e){
+			$msg = $e->getMessage();      
+		}
+
+		if($success == 1){
+			$response = [
+				'msg'       => 'Product was updated successfully!',
+				'flag'      => $success
+			];
+		}else{
+			$response = [
+				'msg'       => $msg,
+				'flag'      => $success
+			];
+		}
+
+		echo json_encode($response);
+	}
+
+	public function delete_product(){
+		try{
+			$success       		= 0;
+			$product_id 		= trim($this->input->get('product_id'));
+			
+			if(EMPTY($product_id))
+				throw new Exception("Product ID is required.");
+
+			$this->home_model->delete_product($product_id);
+			
+			$success  = 1;
+		}catch (Exception $e){
+			$msg = $e->getMessage();      
+		}
+
+		if($success == 1){
+			$response = [
+				'msg'       => 'Product was successfully deleted.',
 				'flag'      => $success
 			];
 		}else{

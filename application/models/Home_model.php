@@ -4,13 +4,13 @@ class Home_model extends CI_Model {
 		$where_condition = '';
 
 		if(!empty($product_id)){
-			$where_condition .= "WHERE A.product_id = '" . $product_id . "'";
+			$where_condition .= "AND A.product_id = '" . $product_id . "'";
 		}
 
 		if(!empty($product_name)){
-			$where_condition .= "WHERE A.product_name = '" . $product_name . "'";
+			$where_condition .= "AND A.product_name = '" . $product_name . "'";
 		}
-
+		
 		$query = "
 			SELECT 
 				A.product_id, A.product_name, A.product_description, 
@@ -19,7 +19,7 @@ class Home_model extends CI_Model {
 			FROM 
 				products A
 			LEFT JOIN 
-				product_qty B ON A.product_id = B.product_id $where_condition
+				product_qty B ON A.product_id = B.product_id WHERE A.product_active_flag = 'Y' $where_condition
 			";
 
 		$stmt = $this->db->query($query);
@@ -45,6 +45,41 @@ class Home_model extends CI_Model {
 			
 			$this->db->insert('product_qty', $product_qty_fields);
 		}catch(PDOException $e){
+			$msg = $e->getMessage();
+			$this->db->trans_rollback();
+		}
+	}
+
+	public function edit_product(array $product_params){
+		try{
+			$products_fields = array(
+				'product_name'			=> $product_params['product_name'],
+				'product_description'	=> $product_params['product_description'],
+				'product_amount'		=> $product_params['product_amount'],
+				'product_seller'		=> $product_params['product_seller']
+			);
+			
+			$this->db->where('product_id', $product_params['product_id']);
+			$this->db->update('products', $products_fields);
+			
+			$product_qty_fields = array(
+				'quantity'		=> $product_params['product_quantity']
+			);
+			
+			$this->db->where('product_id', $product_params['product_id']);
+			$this->db->update('product_qty', $product_qty_fields);
+		}catch(PDOException $e){
+			$msg = $e->getMessage();
+			$this->db->trans_rollback();
+		}
+	}
+
+	public function delete_product($product_id){
+        try {
+            $order_params = array('product_active_flag' => 'N');
+            $this->db->where('product_id', $product_id);
+            $this->db->update('products', $order_params);
+        }catch(PDOException $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
 		}
