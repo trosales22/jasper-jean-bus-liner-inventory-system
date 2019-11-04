@@ -273,4 +273,33 @@ class Home extends CI_Controller {
 
 		echo json_encode($response);
 	}
+
+	public function decline_pending_order(){
+		try{
+			$success 	= 0;
+			$order_id 	= trim($this->input->get('order_id'));
+			
+			if(EMPTY($order_id))
+				throw new Exception("Order ID is required.");
+
+			$this->home_model->decline_pending_order($order_id);
+			$success  = 1;
+		}catch (Exception $e){
+			$msg = $e->getMessage();
+		}
+
+		if($success == 1){
+			$response = [
+				'msg'       => 'Order was successfully declined.',
+				'flag'      => $success
+			];
+		}else{
+			$response = [
+				'msg'       => $msg,
+				'flag'      => $success
+			];
+		}
+
+		echo json_encode($response);
+	}
 }

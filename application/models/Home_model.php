@@ -140,4 +140,13 @@ class Home_model extends CI_Model {
 			$this->db->trans_rollback();
 		}
 	}
+
+	public function decline_pending_order($order_id){
+        try {
+			$this->db->delete('orders', array('order_id' => $order_id));
+        }catch(PDOException $e){
+			$msg = $e->getMessage();
+			$this->db->trans_rollback();
+		}
+	}
 }

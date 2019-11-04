@@ -153,11 +153,18 @@
 												<td><?php echo $order->order_date_added;?></td>
 												<td>
 													<?php if($order->order_status == 'PENDING'){ ?>
-													<a style="width: 100%; cursor: pointer; color: white;" data-id="<?php echo $order->order_id;?>" class="btnApproveOrder btn btn-info btn-icon-split">
+													<a style="width: 100%; margin-bottom: 8px; cursor: pointer; color: white;" data-id="<?php echo $order->order_id;?>" class="btnApproveOrder btn btn-info btn-icon-split">
 														<span class="icon text-white-50" style="margin-right: auto;">
-															<i class="fas fa-check"></i>
+															<i class="fas fa-thumbs-up"></i>
 														</span>
 														<span class="text" style="margin-right: auto;">Approve Order</span>
+													</a>
+
+													<a style="width: 100%; cursor: pointer; color: white;" data-id="<?php echo $order->order_id;?>" class="btnDeclineOrder btn btn-danger btn-icon-split">
+														<span class="icon text-white-50" style="margin-right: auto;">
+															<i class="fas fa-thumbs-down"></i>
+														</span>
+														<span class="text" style="margin-right: auto;">Decline Order</span>
 													</a>
 													<?php }else{
 														echo "<strong>ALREADY APPROVED</strong>";
