@@ -72,7 +72,21 @@
 											<tr>
 												<td><?php echo $product->product_name;?></td>
 												<td><?php echo $product->product_description;?></td>
-												<td><?php echo $product->product_quantity;?></td>
+												<td>
+													<?php 
+														$product_quantity = $product->product_quantity;
+
+														if($product_quantity <= 5){
+															echo '<div class="alert alert-danger">
+																			<span class="icon text-red-50" style="margin-right: auto;">
+																				<i class="fas fa-exclamation-triangle"></i>
+																			</span> <b>THIS NEEDS ATTENTION DUE TO REMAINING QUANTITY:</b> ' . $product_quantity .
+																		'</div>';
+														}else{
+															echo $product->product_quantity;
+														}
+													?>
+												</td>
 												<td><?php echo '₱' . $product->product_amount;?></td>
 												<td><?php echo $product->product_seller;?></td>
 												<td><?php echo $product->product_date_added;?></td>
