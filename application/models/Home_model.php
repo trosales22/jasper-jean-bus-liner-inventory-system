@@ -19,9 +19,11 @@ class Home_model extends CI_Model {
 			SELECT 
 				log_id, log_msg, DATE_FORMAT(log_datetime, '%M %d, %Y %r') as log_datetime 
 			FROM 
-				activity_logs
+				activity_logs 
+			ORDER BY 
+				log_id DESC
 			";
-		
+
 		$stmt = $this->db->query($query);
 		return $stmt->result();
 	}
