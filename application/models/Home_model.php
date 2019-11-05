@@ -1,5 +1,31 @@
 <?php
 class Home_model extends CI_Model {
+	private function _add_to_logs($msg){
+		try{
+			$logs_fields = array(
+				'log_msg'			=> $msg
+			);
+			
+			$this->db->insert('activity_logs', $logs_fields);
+			$lastInsertedId = $this->db->insert_id();
+		}catch(PDOException $e){
+			$msg = $e->getMessage();
+			$this->db->trans_rollback();
+		}
+	}
+
+	public function get_activity_logs($log_id = NULL){
+		$query = "
+			SELECT 
+				log_id, log_msg, DATE_FORMAT(log_datetime, '%M %d, %Y %r') as log_datetime 
+			FROM 
+				activity_logs
+			";
+		
+		$stmt = $this->db->query($query);
+		return $stmt->result();
+	}
+
 	public function get_products($product_id = NULL, $product_name = NULL){
 		$where_condition = '';
 
@@ -44,6 +70,7 @@ class Home_model extends CI_Model {
 			);
 			
 			$this->db->insert('product_qty', $product_qty_fields);
+			$this->_add_to_logs($product_params['product_name'] . ' has been added to products.');
 		}catch(PDOException $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
@@ -52,6 +79,8 @@ class Home_model extends CI_Model {
 
 	public function edit_product(array $product_params){
 		try{
+			$product_details = $this->get_products($product_params['product_id'], NULL);
+
 			$products_fields = array(
 				'product_name'			=> $product_params['product_name'],
 				'product_description'	=> $product_params['product_description'],
@@ -68,6 +97,8 @@ class Home_model extends CI_Model {
 			
 			$this->db->where('product_id', $product_params['product_id']);
 			$this->db->update('product_qty', $product_qty_fields);
+
+			$this->_add_to_logs($product_details[0]->product_name . ' details has been modified.');
 		}catch(PDOException $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
@@ -76,9 +107,12 @@ class Home_model extends CI_Model {
 
 	public function delete_product($product_id){
         try {
+			$product_details = $this->get_products($product_id, NULL);
+
             $order_params = array('product_active_flag' => 'N');
             $this->db->where('product_id', $product_id);
-            $this->db->update('products', $order_params);
+			$this->db->update('products', $order_params);
+			$this->_add_to_logs($product_details[0]->product_name . ' has been deleted.');
         }catch(PDOException $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
@@ -109,8 +143,11 @@ class Home_model extends CI_Model {
 
 	public function add_order(array $order_params){
 		try{
+			$product_details = $this->get_products($order_params['order_product'], NULL);
+
 			$this->db->insert('orders', $order_params);
 			$lastInsertedId = $this->db->insert_id();
+			$this->_add_to_logs($order_params['order_name'] . ' ordered ' . $product_details[0]->product_name . ' for ' . $order_params['order_bus'] . '.');
 		}catch(PDOException $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
@@ -135,6 +172,8 @@ class Home_model extends CI_Model {
 			$order_params = array('quantity' => $product_details[0]->product_quantity - $order_details[0]->order_quantity);
 			$this->db->where('product_id', $product_details[0]->product_id);
 			$this->db->update('product_qty', $order_params);
+
+			$this->_add_to_logs('Order ID #' . $order_id . ' has been approved.');
 		}catch(Exception $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
@@ -144,6 +183,7 @@ class Home_model extends CI_Model {
 	public function decline_pending_order($order_id){
         try {
 			$this->db->delete('orders', array('order_id' => $order_id));
+			$this->_add_to_logs('Order ID #' . $order_id . ' has been declined.');
         }catch(PDOException $e){
 			$msg = $e->getMessage();
 			$this->db->trans_rollback();
