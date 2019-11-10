@@ -223,6 +223,11 @@ class Home extends CI_Controller {
 				'order_bus'			=> $order_bus
 			);
 
+			$product_details = $this->home_model->get_products($order_product, NULL);
+			
+			if($product_details[0]->product_quantity == 0 || ($order_quantity > $product_details[0]->product_quantity))
+				throw new Exception("Insufficient product quantity. Please try again later.");
+			
 			$this->home_model->add_order($order_params);
 			
 			$success  = 1;
